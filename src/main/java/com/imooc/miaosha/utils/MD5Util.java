@@ -1,5 +1,7 @@
 package com.imooc.miaosha.utils;
 
+import java.util.Stack;
+
 import org.apache.commons.codec.digest.DigestUtils;
 
 public class MD5Util {

@@ -7,7 +7,7 @@ import com.imooc.miaosha.vo.LoginVo;
 
 public interface MiaoshaUserService {
 
-	boolean login(HttpServletResponse response, LoginVo loginVo);
+	Boolean login(HttpServletResponse response, LoginVo loginVo);
 	
 	MiaoshaUser getByToken(HttpServletResponse response, String token);
 }

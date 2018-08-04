@@ -16,12 +16,13 @@ public class CookieUtil {
 	
 	public static Cookie get(HttpServletRequest request, String key) {
 		Cookie[] cookies = request.getCookies();
-		if(cookies != null) {
-			for(Cookie cookie : cookies) {
-				String cookieName = cookie.getName();
-				if(cookieName.equals(key)) {
-					return cookie;
-				}
+		if(cookies == null || cookies.length <= 0) {
+			return null;
+		}
+		for(Cookie cookie : cookies) {
+			String cookieName = cookie.getName();
+			if(cookieName.equals(key)) {
+				return cookie;
 			}
 		}
 		return null;

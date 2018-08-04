@@ -5,10 +5,12 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.imooc.miaosha.dao.MiaoshaUserDao;
 import com.imooc.miaosha.domain.MiaoshaUser;
 import com.imooc.miaosha.exception.GlobalException;
+import com.imooc.miaosha.redis.MiaoshaUserPrefix;
 import com.imooc.miaosha.redis.RedisService;
 import com.imooc.miaosha.redis.TokenPrefix;
 import com.imooc.miaosha.result.CodeMsg;
@@ -29,7 +31,22 @@ public class MiaoshaUserServiceImpl implements MiaoshaUserService{
 	@Autowired
 	private RedisService redisService;
 	
-	public boolean login(HttpServletResponse response, LoginVo loginVo) {
+	public MiaoshaUser getById(Long id) {
+		//取缓存
+		MiaoshaUser miaoshaUser = redisService.get(MiaoshaUserPrefix.miaoshaUserPrefix, "" + id, MiaoshaUser.class);
+		if(miaoshaUser != null) {
+			return miaoshaUser;
+		}
+		//缓存取不到,查询数据库并加载到缓存中
+		MiaoshaUser userDb = miaoshaUserDao.getById(id);
+		if(userDb == null) {
+			throw new GlobalException(CodeMsg.USER_NOT_EXIST);
+		}
+		redisService.set(MiaoshaUserPrefix.miaoshaUserPrefix, "" + id, userDb);
+		return userDb;
+	}
+	
+	public Boolean login(HttpServletResponse response, LoginVo loginVo) {
 		String mobile = loginVo.getMobile();
 		String inputPass = loginVo.getPassword();
 		MiaoshaUser user = miaoshaUserDao.getById(Long.parseLong(mobile));
@@ -44,6 +61,22 @@ public class MiaoshaUserServiceImpl implements MiaoshaUserService{
 		}
 		String tokenVal = UUIdUtil.uuid();
 		addCookie(response, tokenVal, user);
+		return true;
+	}
+	
+	@Transactional
+	public boolean updatePassword(String token, Long id, String passwordNew, HttpServletResponse response) {
+		MiaoshaUser user = getById(id);
+		String passwdNewDb = MD5Util.formPassToDBPass(passwordNew, user.getSalt());
+		//更新数据库
+		MiaoshaUser updateUser = new MiaoshaUser();
+		updateUser.setId(id);
+		updateUser.setPassword(passwdNewDb);
+		miaoshaUserDao.update(updateUser);
+		//更新缓存
+		redisService.delete(MiaoshaUserPrefix.miaoshaUserPrefix, "" + id);
+		user.setPassword(passwdNewDb);
+		redisService.set(TokenPrefix.tokenPrefix, "" + id, user);
 		return true;
 	}
 	
