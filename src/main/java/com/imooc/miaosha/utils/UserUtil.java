@@ -7,9 +7,6 @@ import java.io.OutputStream;
 import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -33,8 +30,8 @@ public class UserUtil {
 			user.setPassword(MD5Util.inputPassToDBPass("123456", user.getSalt()));
 			users.add(user);
 		}
-		System.out.println("create user");
-		//插入数据库
+//		System.out.println("create user");
+//		//插入数据库
 //		Connection conn = DBUtil.getConn();
 //		String sql = "insert into miaosha_user(login_count, nickname, register_date, salt, password, id)values(?,?,?,?,?,?)";
 //		PreparedStatement pstmt = conn.prepareStatement(sql);

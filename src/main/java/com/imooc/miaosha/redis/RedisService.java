@@ -126,7 +126,7 @@ public class RedisService {
 		}
 	}
 	
-	private <T> String beanToString(T t) {
+	public static <T> String beanToString(T t) {
 		if(t == null) {
 			return null;
 		}
@@ -142,7 +142,7 @@ public class RedisService {
 	}
 
 	@SuppressWarnings("unchecked")
-	private <T> T stringToBean(String str, Class<T> clazz) {
+	public static <T> T stringToBean(String str, Class<T> clazz) {
 		if(str == null || str.length() <= 0 || clazz == null) {
 			return null;
 		}

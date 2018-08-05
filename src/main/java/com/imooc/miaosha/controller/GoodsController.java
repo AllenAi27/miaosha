@@ -91,7 +91,7 @@ public class GoodsController {
 			}
 		}
 		//取缓存
-		String html = redisService.get(GoodsPrefix.goodsPrefix, "" + goodsId, String.class);
+		String html = redisService.get(GoodsPrefix.miaoshaGoodsPrefix, "" + goodsId, String.class);
 		if(!StringUtils.isBlank(html)) {
 			return html;
 		}
@@ -119,7 +119,7 @@ public class GoodsController {
 		SpringWebContext ctx = new SpringWebContext(request, response, request.getServletContext(), request.getLocale(), model.asMap(), applicationContext);
 		html = thymeleafViewResolver.getTemplateEngine().process("goods_detail", ctx);
 		if(StringUtils.isNotBlank(html)) {
-			redisService.set(GoodsPrefix.goodsPrefix, "" + goodsId, html);
+			redisService.set(GoodsPrefix.miaoshaGoodsPrefix, "" + goodsId, html);
 		}
 		return html;
 	}

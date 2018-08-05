@@ -10,5 +10,5 @@ public class OrderPrefix extends BasePrefix{
 		super(prefix);
 	}
 
-	public static OrderPrefix goodsPrefix = new OrderPrefix("MiaoshaOrder");
+	public static OrderPrefix miaoshaOrderPrefix = new OrderPrefix("MiaoshaOrder");
 }

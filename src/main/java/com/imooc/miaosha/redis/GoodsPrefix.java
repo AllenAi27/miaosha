@@ -10,5 +10,6 @@ public class GoodsPrefix extends BasePrefix{
 		super(prefix);
 	}
 
-	public static GoodsPrefix goodsPrefix = new GoodsPrefix(10, "goods");
+	public static GoodsPrefix miaoshaGoodsPrefix = new GoodsPrefix(10, "msGoods");
+	public static GoodsPrefix miaoshaGoodsStockPrefix = new GoodsPrefix(0, "msGoodsStock");
 }

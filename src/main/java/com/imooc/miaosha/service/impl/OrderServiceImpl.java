@@ -25,7 +25,7 @@ public class OrderServiceImpl implements OrderService{
 	private RedisService redisService; 
 	
 	public MiaoshaOrder getMiaoshaOrderByUserIdAndGoodsId(long userId, long goodsId) {
-		return redisService.get(OrderPrefix.goodsPrefix, "" + userId + "_" + goodsId, MiaoshaOrder.class);
+		return redisService.get(OrderPrefix.miaoshaOrderPrefix, "" + userId + "_" + goodsId, MiaoshaOrder.class);
 	}
 
 	@Transactional
@@ -47,7 +47,7 @@ public class OrderServiceImpl implements OrderService{
 		miaoshaOrder.setUserId(user.getId());
 		orderDao.insertMiaoshaOrder(miaoshaOrder);
 		
-		redisService.set(OrderPrefix.goodsPrefix, "" + miaoshaOrder.getId() + "_" + miaoshaOrder.getGoodsId(), miaoshaOrder);
+		redisService.set(OrderPrefix.miaoshaOrderPrefix, "" + miaoshaOrder.getUserId() + "_" + miaoshaOrder.getGoodsId(), miaoshaOrder);
 		return orderInfo;
 	}
 	
